@@ -1,6 +1,9 @@
 from abc import ABC, abstractmethod
 from typing import Optional, TypeVar, Generic, Iterable
 
+# dictionary - item is key, count is value
+# list - unique items in the outer list, count in inner
+
 T = TypeVar('T')  # Generic type for items in the Bag
 
 class IBag(ABC, Generic[T]):

@@ -16,7 +16,9 @@ class Bag(IBag[T]):
 
     def add(self, item: T) -> None:
         # if already in bag increase count, if not add it
-        if item in self.__bag:
+        if item == None:
+            raise TypeError("Cannot add None type")
+        elif item in self.__bag:
             self.__bag[item] += 1
         else:
             self.__bag[item] = 1

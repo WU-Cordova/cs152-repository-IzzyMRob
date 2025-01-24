@@ -28,7 +28,7 @@ class Bag(IBag[T]):
         if item in self.__bag and self.__bag[item] > 0:
             self.__bag[item] -= 1
         else:
-            print(f"There is no {item} in the bag!")
+            raise ValueError(f"There is no {item} in the bag!")
 
     def count(self, item: T) -> int:
         # if it's in the bag return the value/count

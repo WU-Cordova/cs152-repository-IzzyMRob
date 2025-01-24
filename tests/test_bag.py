@@ -60,6 +60,12 @@ def test_distinct_items_returns_unique_items(bag: Bag[int]):
     bag.add(9)
     assert set(bag.distinct_items()) == {8, 9}
 
+def test_num_distinct_items(bag: Bag[int]):
+    bag.add(8)
+    bag.add(8)
+    bag.add(9)
+    assert bag.num_distinct_items() is 2
+
 
 def test_contains_checks_item_membership(bag: Bag[int]):    
     """Test contains method correctly checks if an item is in the bag."""

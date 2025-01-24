@@ -36,7 +36,9 @@ class Bag(IBag[T]):
             return 0
 
     def __len__(self) -> int:
+        # start total as 0
         total = 0
+        
         # for every item add how many of it there are
         for item in self.__bag:
             total += self.__bag[item] 
@@ -45,6 +47,7 @@ class Bag(IBag[T]):
     def distinct_items(self) -> Iterable[T]:
         # blank list
         items: list[T] = []
+        
         # add every key in the bag
         for item in self.__bag:
             items.append(item)

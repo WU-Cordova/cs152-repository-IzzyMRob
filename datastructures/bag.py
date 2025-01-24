@@ -71,12 +71,12 @@ class Bag(IBag[T]):
         self.__bag: dict[T, int] = {}
 
     def clear_except(self, *items:Optional[Iterable[T]]) -> None:
-        # if an item passed in isn't in the bag
+        # if an item passed in isn't in the bag raise an error
         for passed_item in items:
             if passed_item not in self.__bag:
                 raise ValueError("fThere is no {item} in the bag!")
 
-        # if an item wasn't passed in to be kept it is removed
+        # remove all items from the Bag if they werent passed in
         for item in self.__bag:
             if item not in items:
                 self.remove(item)

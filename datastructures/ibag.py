@@ -186,7 +186,7 @@ class IBag(ABC, Generic[T]):
     @abstractmethod
     def clear_except(self, *items:Optional[Iterable[T]]) -> None:
         """
-        Removes all items from the Bag except ones passed in.
+        Removes all items from the Bag except the ones passed in.
 
         Args:
             items (T): The items to be left in the Bag.

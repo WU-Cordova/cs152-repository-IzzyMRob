@@ -44,7 +44,7 @@ class Bag(IBag[T]):
 
     def distinct_items(self) -> Iterable[T]:
         # blank list
-        items = []
+        items: list[T] = []
         # add every key in the bag
         for item in self.__bag:
             items.append(item)

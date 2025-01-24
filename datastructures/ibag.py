@@ -138,6 +138,15 @@ class IBag(ABC, Generic[T]):
         
         Returns:
             int: The total number of distinct items in the Bag.
+
+        Examples:
+            >>> bag: Bag[int] = Bag()
+            >>> bag.add(1)
+            >>> bag.add(2)
+            >>> bag.add(1)
+
+            >>> bag.num_distinct_items()
+            2
         """
         pass
     
@@ -171,5 +180,21 @@ class IBag(ABC, Generic[T]):
     def clear(self) -> None:
         """
         Removes all items from the Bag.
+        """
+        pass
+
+    @abstractmethod
+    def clear_except(self, *items:Optional[Iterable[T]]) -> None:
+        """
+        Removes all items from the Bag except ones passed in.
+
+        Args:
+            items (T): The items to be left in the Bag.
+
+        Returns:
+            None
+
+        Raises:
+            ValueError if ValueError: If the item is not present in the Bag.
         """
         pass

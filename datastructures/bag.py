@@ -56,7 +56,7 @@ class Bag(IBag[T]):
         return items
     
     def num_distinct_items(self) -> int:
-        # returns the length of the dictionary
+        # return the length of the dictionary
         return len(self.__bag)
     
     def __contains__(self, item) -> bool:
@@ -69,3 +69,14 @@ class Bag(IBag[T]):
     def clear(self) -> None:
         # same code is init, resets the dictionary
         self.__bag: dict[T, int] = {}
+
+    def clear_except(self, *items:Optional[Iterable[T]]) -> None:
+        # if an item passed in isn't in the bag
+        for passed_item in items:
+            if passed_item not in self.__bag:
+                raise ValueError("fThere is no {item} in the bag!")
+
+        # if an item wasn't passed in to be kept it is removed
+        for item in self.__bag:
+            if item not in items:
+                self.remove(item)

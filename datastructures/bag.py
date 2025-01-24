@@ -19,7 +19,7 @@ class Bag(IBag[T]):
         if item in self.__bag:
             self.__bag[item] += 1
         else:
-            self.__bag[item] = 0
+            self.__bag[item] = 1
 
     def remove(self, item: T) -> None:
         # if it's in the bag and there is at least one of them

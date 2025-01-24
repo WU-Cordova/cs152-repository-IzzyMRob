@@ -55,6 +55,10 @@ class Bag(IBag[T]):
             items.append(item)
         return items
     
+    def num_distinct_items(self) -> int:
+        # returns the length of the dictionary
+        return len(self.__bag)
+    
     def __contains__(self, item) -> bool:
         # return true if item is on the bag, false otherwise
         if item in self.__bag:

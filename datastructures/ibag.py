@@ -130,6 +130,16 @@ class IBag(ABC, Generic[T]):
             Iterable[T]: An iterable of the distinct items in the Bag.
         """
         pass
+
+    @abstractmethod
+    def num_distinct_items(self) -> int:
+        """
+        Returns the total number of distinct items in the Bag.
+        
+        Returns:
+            int: The total number of distinct items in the Bag.
+        """
+        pass
     
     @abstractmethod
     def __contains__(self, item: T) -> bool:

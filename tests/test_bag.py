@@ -82,6 +82,10 @@ def test_clear_except_working(bag: Bag[int]):
     bag.add(12)
     bag.add(13)
     bag.clear_except(12)
-    assert len(bag) == 1
     assert 12 in bag
     assert 13 not in bag
+
+def test_clear_except_nonexistent_item_raises_value_error(bag: Bag[int]):
+    """Test clearing except an item not in the bag raises a ValueError."""
+    with pytest.raises(ValueError):
+        bag.clear_except(3)

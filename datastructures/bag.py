@@ -76,7 +76,13 @@ class Bag(IBag[T]):
             if passed_item not in self.__bag:
                 raise ValueError("fThere is no {item} in the bag!")
 
-        # remove all items from the Bag if they werent passed in
+        # create new blank dictionary
+        new_bag: dict[T, int] = {}
+
+        # add items that were passed in to a new dictionary
         for item in self.__bag:
-            if item not in items:
-                self.remove(item)
+            if item in items:
+                new_bag[item] = self.__bag[item]
+        
+        #set self.__bag equal to the new dictionary
+        self.__bag = new_bag

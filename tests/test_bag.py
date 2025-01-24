@@ -76,3 +76,12 @@ def test_clear_removes_all_items(bag: Bag[int]):
     assert len(bag) == 0
     assert 12 not in bag
     assert 13 not in bag
+
+def test_clear_except_working(bag: Bag[int]):
+    """Test clear method removes all items from the bag."""
+    bag.add(12)
+    bag.add(13)
+    bag.clear_except(12)
+    assert len(bag) == 1
+    assert 12 in bag
+    assert 13 not in bag

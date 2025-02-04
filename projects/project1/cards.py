@@ -28,30 +28,19 @@ class CardFace(Enum):
     KING = 10
     ACE = 11
 
-card_faces: list[int] = [face.value for face in CardFace]
-"""
-card_faces: dict = {
-    'ONE':1, 
-    'TWO':2, 
-    'THREE':3, 
-    'FOUR':4, 
-    'FIVE':5, 
-    'SIX':6, 
-    'SEVEN':7,
-    'EIGHT':8,
-    'NINE':9,
-    'TEN':10,
-    'JACK':10,
-    'QUEEN':10,
-    'KING':10,
-    'ACE':10
-    }
-"""
+card_faces: list[str] = [face for face in CardFace.__members__]
+
 class Card():
 
     def __init__(self, face, suit) -> None:
-        card_face: CardFace = face.
-
+        """Constructor for Card class.
+        Args:
+            face: string? CardFace enum
+            suit: string, CardSuit enum
+        Returns:
+            None
+        """
+        card_face = face
         card_suit: CardSuit = suit
         card_value: int = face.value
 

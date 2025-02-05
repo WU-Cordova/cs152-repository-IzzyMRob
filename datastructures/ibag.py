@@ -198,3 +198,32 @@ class IBag(ABC, Generic[T]):
             ValueError if ValueError: If the item is not present in the Bag.
         """
         pass
+
+    @abstractmethod
+    def __iter__(self):
+        """
+        Iterator.
+
+        Args:
+            None.
+
+        Returns:
+            self
+        """
+        pass
+
+    @abstractmethod
+    def __next__(self):
+        """
+        Iterator.
+
+        Args:
+            None.
+
+        Returns:
+            value
+
+        Raises:
+            EndIteration: when iteration is completed
+        """
+        pass

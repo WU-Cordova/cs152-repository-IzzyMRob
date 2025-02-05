@@ -8,11 +8,15 @@ class Bag(IBag[T]):
     def __init__(self, *items: Optional[Iterable[T]]) -> None:
         # create main dictionary of type T and integers
         self.__bag: dict[T, int] = {}
+        self._keys = []
+        for key in self.__bag:
+            self._keys += self.__bag
         
         # add items if they were passed in
         if items:
             for item in items:
                 self.add(item)
+        self._counter = 0
 
     def add(self, item: T) -> None:
         # if already in bag increase count, if not add it
@@ -86,3 +90,15 @@ class Bag(IBag[T]):
         
         #set self.__bag equal to the new dictionary
         self.__bag = new_bag
+
+    def __iter__(self):
+        return self
+    
+    def __next__(self):
+        if self._counter < len(self._keys):
+            result = self._keys[self._counter]
+            self._counter += 1
+            return result
+        else:
+            self._counter = 0
+            raise StopIteration()

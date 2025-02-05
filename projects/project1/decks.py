@@ -1,23 +1,28 @@
 #File: decks.py
 
 # Imports
-from datastructures.bag import Bag
 from projects.project1.cards import Card, card_suits, card_faces
+from datastructures.bag import Bag
 
 # Implimantation
 class Deck:
 
     def __init__(self) -> None:
-        """Constructor for Deck class, creates a Bag object and stores Card objects in it.
+        """Constructor for Deck class, creates a Bag object and stores 52 Card objects in it.
+        
         Args:
             None
         Returns:
             None
         """
-        self._deck = Bag()
+        self._cards: Bag = Bag()
+        
+        # add one of every card
         for suit in card_suits:
             for face in card_faces:
-                self._deck.add(Card(face, suit))
-        
-if __name__ == '__main__':
-    print(Deck())
+                self._cards.add(Card(face, suit))
+
+    @property
+    def cards(self):
+        """cards property, Bag"""
+        return self._cards

@@ -4,8 +4,6 @@
 from projects.project1.game import Game
 import random
 
-# Constants
-
 # Implimentation
 
 # card, deck and game classes
@@ -15,7 +13,7 @@ import random
 def main():
     num_decks = (random.randint(1, 4)) * 2
     game = Game(num_decks)
-    game.run()
+    game.start_game()
 
 
 

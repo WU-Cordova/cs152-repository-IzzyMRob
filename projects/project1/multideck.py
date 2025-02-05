@@ -39,9 +39,6 @@ class MultiDeck:
         #add cards to the Bag
         for card in deck.cards:
             self._cards.add(card)
-        
-        #add cards to the list for an order
-        for card in self._cards:
             self._ordered_cards.append(card)
     
     @property

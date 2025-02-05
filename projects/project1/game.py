@@ -64,11 +64,11 @@ class Game:
     def show_scores(self):
         for card in self._player_hand:
             self._player_score += card.value
-            self._player_display.append([''.join(card.face,card.suit)])
+            self._player_display.append([card.face+card.suit])
         
         for card in self._dealer_hand:
             self._dealer_score += card.value
-            self._dealer_display.append([''.join(card.face,card.suit)])
+            self._dealer_display.append([card.face+card.suit])
         print(f"Player Hand: {self._player_display} | Score: {self._player_score}")
         print(f"Dealer Hand: {self._dealer_display} | Score: {self._dealer_score}")
 

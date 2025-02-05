@@ -8,15 +8,15 @@ class Bag(IBag[T]):
     def __init__(self, *items: Optional[Iterable[T]]) -> None:
         # create main dictionary of type T and integers
         self.__bag: dict[T, int] = {}
-        self._keys = []
-        for key in self.__bag:
-            self._keys += self.__bag
+        self._keys: list = []
+
         
         # add items if they were passed in
         if items:
             for item in items:
                 self.add(item)
         self._counter = 0
+
 
     def add(self, item: T) -> None:
         # if already in bag increase count, if not add it
@@ -26,13 +26,18 @@ class Bag(IBag[T]):
             self.__bag[item] += 1
         else:
             self.__bag[item] = 1
+        
+        # add any new item names to the keys
+        self._keys.append(item)
 
     def remove(self, item: T) -> None:
         # if it's in the bag and there is at least one of them
         if item in self.__bag and self.__bag[item] > 0:
             self.__bag[item] -= 1
+            self._keys.pop(item)
         else:
             raise ValueError(f"There is no {item} in the bag!")
+        
 
     def count(self, item: T) -> int:
         # if it's in the bag return the value/count
@@ -73,6 +78,7 @@ class Bag(IBag[T]):
     def clear(self) -> None:
         # same code is init, resets the dictionary
         self.__bag: dict[T, int] = {}
+        self._keys = []
 
     def clear_except(self, *items:Optional[Iterable[T]]) -> None:
         # if an item passed in isn't in the bag raise an error

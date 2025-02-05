@@ -1,8 +1,8 @@
 # File: program.py
 
 # Imports (run as a debug to import from datastructures properly)
-from datastructures.bag import Bag
 from projects.project1.game import Game
+import random
 
 # Constants
 
@@ -13,7 +13,8 @@ from projects.project1.game import Game
 # game play, dealer, score
 
 def main():
-    game = Game
+    num_decks = (random.randint(1, 4)) * 2
+    game = Game(num_decks)
     game.run()
 
 

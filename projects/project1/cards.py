@@ -12,23 +12,23 @@ class CardSuit(Enum):
 
 card_suits: list[str] = [suit.value for suit in CardSuit]
 
+CardFace: dict = { # tuples: (displayed_char, score)
+    'ONE' : ('1', 1),
+    'TWO' : ('2', 2),
+    'THREE' : ('3', 3),
+    'FOUR' : ('4', 4),
+    'FIVE' : ('5', 5),
+    'SIX' : ('6', 6),
+    'SEVEN' : ('7', 7),
+    'EIGHT' : ('8', 8),
+    'NINE' : ('9', 9),
+    'JACK' : ('J', 10),
+    'QUEEN' : ('Q', 10),
+    'KING' : ('K', 10),
+    'ACE' : ('A', 11, 1)
+}
 
-class CardFace(Enum):
-    ONE = 1
-    TWO = 2
-    THREE = 3
-    FOUR = 4
-    FIVE = 5
-    SIX = 6
-    SEVEN = 7
-    EIGHT = 8
-    NINE = 9
-    JACK = 10
-    QUEEN = 10
-    KING = 10
-    ACE = 11
-
-card_faces: list[str] = [face for face in CardFace.__members__]
+card_faces: list[str] = [face for face in CardFace]
 
 class Card():
 
@@ -40,9 +40,9 @@ class Card():
         Returns:
             None
         """
-        card_face = face
+        card_face: str = CardFace[face][0]
         card_suit: CardSuit = suit
-        card_value: int = face.value
+        card_value: int = CardFace[face][1]
 
 if __name__ == '__main__':
     print(card_suits)

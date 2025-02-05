@@ -1,13 +1,13 @@
 # File: game.py
 
 import random
-#from projects.project1.multideck import MultiDeck
+from projects.project1.multideck import MultiDeck
 
 class Game:
 
-    def __init__(self, num_decks):
+    def __init__(self, num_decks: int):
         self._deck = MultiDeck(num_decks)
-
+        self._deck.shuffle()
     
     def run(self) -> None:
         """ Starts the game. Algorithm: 
@@ -19,5 +19,3 @@ class Game:
         """
         running = True
         while running:
-            num_decks = (random.randint[1, 4]) * 2
-            print(num_decks)

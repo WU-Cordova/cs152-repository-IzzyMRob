@@ -1,7 +1,6 @@
 #File: decks.py
 
 # Imports
-import random
 from datastructures.bag import Bag
 from projects.project1.cards import Card, card_suits, card_faces
 
@@ -15,8 +14,10 @@ class Deck:
         Returns:
             None
         """
-        deck = Bag()
+        self._deck = Bag()
         for suit in card_suits:
             for face in card_faces:
-                deck.add(Card(face, suit))
+                self._deck.add(Card(face, suit))
         
+if __name__ == '__main__':
+    print(Deck())

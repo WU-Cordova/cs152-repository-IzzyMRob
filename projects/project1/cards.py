@@ -64,6 +64,11 @@ class Card():
         """card value property, int"""
         return self._card_value
 
+    @value.setter
+    def value(self, value: int):
+        """card value setter, int"""
+        self._card_value = value
+
 if __name__ == '__main__':
     pass
     #print(card_suits)

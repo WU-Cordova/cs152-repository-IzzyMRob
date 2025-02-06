@@ -9,10 +9,10 @@ import random
 def main():
     """Main function to run the Black Jack game."""    
     # loop to restart
-    running = True
+    running: bool = True
     while running:
-        num_decks = (random.randint(1, 4)) * 2
-        game = Game(num_decks)
+        num_decks: int = (random.randint(1, 4)) * 2
+        game: Game = Game(num_decks)
         running = game.start_game()
 
 

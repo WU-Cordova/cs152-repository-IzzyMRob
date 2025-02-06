@@ -34,15 +34,14 @@ class Game:
                 1.1. Deal 2 cards to player and dealer.
                 1.2. Allow Player to Hit or Stay.
                 1.3. When Player busts/Stays, break the loop.
-            2. Print the result of the battle.
+            2. Print the result of the game.
         """
         # set up
         self.deal()
         
         # game loop
-        running = True
+        running: bool = True
         while running:
-            running = self.check_for_end()
             response = input("Would you like to (H)it or (S)tay?").upper()
             if response == "H": # give player card, continue loop
                 self.hit()
@@ -69,7 +68,7 @@ class Game:
         random.shuffle(self._draw_pile)
     
     def deal(self) -> None:
-        """Deals two cards to each player and displays the 
+        """Method to deal two cards to each player and display the 
         current scores.
 
         Args: 
@@ -78,13 +77,14 @@ class Game:
             None
         """
         # alternates dealing one card to player and dealer
-        self.dealer_draw()
         self.player_draw()
         self.dealer_draw()
         self.player_draw()
+        self.dealer_draw()
+        
         self.show_scores()
 
-    def show_scores(self) -> None:
+    def show_scores(self, over: bool = False) -> None:
         """Method to print the hands and scores of the player and dealer.
         
         Args:
@@ -93,20 +93,24 @@ class Game:
             None
         """
         # empty the displays
-        self._player_display: list[list] = []
-        self._dealer_display: list[list] = []
+        self._player_display, self._dealer_display = [], []
         
+        # add cards in player and dealer hands
         for card in self._player_hand:
             self._player_display += ([card.face+card.suit])
-        
         for card in self._dealer_hand:
             self._dealer_display += ([card.face+card.suit])
         
+        #print
         print(f"Player Hand: {self._player_display} | Score: {self._player_score}")
-        print(f"Dealer Hand: {self._dealer_display} | Score: {self._dealer_score}")
+        if over: # show hidden cards and total score
+            print(f"Dealer Hand: {self._dealer_display} | Score: {self._dealer_score}")
+        else:
+            print(f"Dealer Hand: {self._dealer_display[0]} [H] | Score: {self._dealer_hand[0].value}")
+        print("----------")
 
     def check_for_end(self) -> bool:
-        """Method to check if the game has ended yet. If a hand is over 21
+        """Method to check if the game has ended yet. If a score is over 21
         change any Ace cards from 11 to 1, upate scores.
         
         Args:
@@ -115,23 +119,31 @@ class Game:
             Bool: True if the game is still running, False otherwise
         """
         # if neither has reached 21 the game continues
-        if self._player_score <= 21 and self._dealer_score <= 21:
+        if self._player_score < 21 and self._dealer_score < 21:
+            self.show_scores()
             return True
         
-        # if the hands have aces readjust their total score to be 1 per Ace
+        # if the hands have aces readjust values to be 1 per Ace instead of 11
         for card in self._player_hand:
             if card.face == "A":
                 card.value = 1
-                self._player_score += (card.value for card in self._player_hand)
         for card in self._dealer_hand:
             if card.face == "A":
                 card.value = 1  
-                self._dealer_score += (card.value for card in self._dealer_hand)
- 
-        # check again for both hands under 21
+        
+        # recalculate scores
+        self._dealer_score, self._player_score = 0, 0
+        for card in self._dealer_hand:
+            self._dealer_score += card.value
+        for card in self._player_hand:
+            self._player_score += card.value        
+
+        # check again for both hands being under 21
         if self._player_score <= 21 and self._dealer_score <= 21:
+            self.show_scores()
             return True
         else:
+            self.show_scores(over = True)
             return False
     
     def determine_winner(self) -> bool:
@@ -143,12 +155,19 @@ class Game:
         Returns:
             bool: True if a new game should start, False otherwise
         """
-        if self._player_score > 21:
-            print("Bust! Dealer wins :(")
-        elif self._player_score == 21:
+        if self._player_score > 21: #player busted (over 21)
+            print("Bust! Dealer wins! :(")
+        elif self._dealer_score > 21: #dealer busted
+            print("Dealer busted! Player wins! :)")
+        elif self._player_score == 21: # player got blackjack (at 21)
             print("BlackJack! Player won! :)")
-        elif self._dealer_score == 21:
+        elif self._dealer_score == 21: # dealer got blackjack (at 21)
             print("BlackJack! Dealer won! :(")
+        else: # neither above 21
+            if self._player_score >= self._dealer_score: # ties are friendly because I say so
+                print("Player wins! :)")
+            else: 
+                print("Dealer wins! :()")
         
         # determine if playing again and return bool
         restart = input("Would you like to play again? (Y/N)").upper()
@@ -165,7 +184,6 @@ class Game:
         Returns:
             None"""
         self.player_draw()
-        self.show_scores()
     
     def stay(self) -> None:
         """Method to draw cards for dealer until they reach 17.
@@ -178,8 +196,6 @@ class Game:
         """
         while self._dealer_score < 17:
             self.dealer_draw()
-            self._dealer_score += (int(card.value) for card in self._dealer_hand)
-        self.show_scores()
 
     def dealer_draw(self) -> None:
         """Method to add a card to the dealer's hand. Updates dealer score.

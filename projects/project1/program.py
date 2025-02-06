@@ -7,8 +7,8 @@ import random
 # Implimentation
 
 def main():
-    """Main function to run the Black Jack game."""    
-    # loop to restart
+    """Main function to play the Black Jack game."""    
+    # loop to play multiple games
     running: bool = True
     while running:
         num_decks: int = (random.randint(1, 4)) * 2

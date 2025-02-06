@@ -42,7 +42,7 @@ class Game:
         # game loop
         running: bool = True
         while running:
-            response = input("Would you like to (H)it or (S)tay?").upper()
+            response: str = input("Would you like to (H)it or (S)tay?").upper()
             if response == "H": # give player card, continue loop
                 self.hit()
                 running = self.check_for_end()
@@ -88,14 +88,15 @@ class Game:
         """Method to print the hands and scores of the player and dealer.
         
         Args:
-            None
+            over (bool): If False the dealer's cards and score will be hidden
+                        if True they will be revealed
         Returns:
             None
         """
         # empty the displays
         self._player_display, self._dealer_display = [], []
         
-        # add cards in player and dealer hands
+        # add cards in player and dealer hands to displays
         for card in self._player_hand:
             self._player_display += ([card.face+card.suit])
         for card in self._dealer_hand:
@@ -105,7 +106,7 @@ class Game:
         print(f"Player Hand: {self._player_display} | Score: {self._player_score}")
         if over: # show hidden cards and total score
             print(f"Dealer Hand: {self._dealer_display} | Score: {self._dealer_score}")
-        else:
+        else: # keep some cards and total score hidden
             print(f"Dealer Hand: {self._dealer_display[0]} [H] | Score: {self._dealer_hand[0].value}")
         print("----------")
 
@@ -123,13 +124,15 @@ class Game:
             self.show_scores()
             return True
         
-        # if the hands have aces readjust values to be 1 per Ace instead of 11
-        for card in self._player_hand:
-            if card.face == "A":
-                card.value = 1
-        for card in self._dealer_hand:
-            if card.face == "A":
-                card.value = 1  
+        # if the hands busted and have aces readjust values to be 1 per Ace instead of 11
+        if self._player_score > 21:
+            for card in self._player_hand:
+                if card.face == "A":
+                    card.value = 1
+        if self._dealer_score > 21:
+            for card in self._dealer_hand:
+                if card.face == "A":
+                    card.value = 1  
         
         # recalculate scores
         self._dealer_score, self._player_score = 0, 0
@@ -157,7 +160,7 @@ class Game:
         """
         if self._player_score > 21: #player busted (over 21)
             print("Bust! Dealer wins! :(")
-        elif self._dealer_score > 21: #dealer busted
+        elif self._dealer_score > 21: #dealer busted (over 21)
             print("Dealer busted! Player wins! :)")
         elif self._player_score == 21: # player got blackjack (at 21)
             print("BlackJack! Player won! :)")
@@ -167,7 +170,7 @@ class Game:
             if self._player_score >= self._dealer_score: # ties are friendly because I say so
                 print("Player wins! :)")
             else: 
-                print("Dealer wins! :()")
+                print("Dealer wins! :(")
         
         # determine if playing again and return bool
         restart = input("Would you like to play again? (Y/N)").upper()
@@ -178,7 +181,7 @@ class Game:
         
     def hit(self) -> None:
         """Method to impliment Hitting in BlackJack. Adds a card to hand and updates score.
-        Prints the current scores.
+        
         Args:
             None
         Returns:
@@ -187,7 +190,6 @@ class Game:
     
     def stay(self) -> None:
         """Method to draw cards for dealer until they reach 17.
-        Updates and prints the curent scores.
         
         Args:
             None

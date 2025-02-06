@@ -15,7 +15,7 @@ class CardSuit(Enum):
 card_suits: list[str] = [suit.value for suit in CardSuit]
 
 # 13 faces stored in a dictionary + turned into a list of strings
-CardFace: dict = { # tuples: (displayed_char, score, *secondary score)
+CardFace: dict = { # tuples: (face, value)
     'ONE' : ('1', 1),
     'TWO' : ('2', 2),
     'THREE' : ('3', 3),
@@ -40,33 +40,33 @@ class Card():
         """Constructor for Card class.
         
         Args:
-            face: string, CardFace dict key
-            suit: string, CardSuit enum
+            face: string, a CardFace dict key
+            suit: string, in CardSuit enum
         Returns:
             None
         """
-        self._card_face: str = CardFace[face][0]
-        self._card_suit: CardSuit = suit
-        self._card_value: int = CardFace[face][1]
+        self._card_face: str = CardFace[face][0] # display to players
+        self._card_suit: CardSuit = suit # display to players
+        self._card_value: int = CardFace[face][1] # sum for score
 
     @property
     def face(self):
-        """card face property, string"""
+        """Card face property, string"""
         return self._card_face
     
     @property
     def suit(self):
-        """card suit property, string"""
+        """Card suit property, string"""
         return self._card_suit
     
     @property
     def value(self):
-        """card value property, int"""
+        """Card value property, int"""
         return self._card_value
 
     @value.setter
     def value(self, value: int):
-        """card value setter, int"""
+        """Card value setter, int"""
         self._card_value = value
 
 if __name__ == '__main__':

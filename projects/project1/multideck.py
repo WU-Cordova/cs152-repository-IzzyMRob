@@ -12,9 +12,7 @@ import random
 class MultiDeck:
 
     def __init__(self, num_decks: int) -> None:
-        """Constructor for MultiDeck class, creates a Bag 
-        to stores Card objects in and a List to order the
-        cards.
+        """Constructor for MultiDeck class.
         
         Args:
             num_decks: how many decks should be added
@@ -43,5 +41,5 @@ class MultiDeck:
     
     @property
     def ordered_cards(self):
-        """ordered cards property, list[Card]"""
+        """MultiDeck ordered cards property, list[Card]"""
         return self._ordered_cards

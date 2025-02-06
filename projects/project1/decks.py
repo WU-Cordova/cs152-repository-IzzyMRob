@@ -5,6 +5,8 @@ from projects.project1.cards import Card, card_suits, card_faces
 from datastructures.bag import Bag
 
 # Implimantation
+
+# Deck class
 class Deck:
 
     def __init__(self) -> None:
@@ -24,5 +26,5 @@ class Deck:
 
     @property
     def cards(self):
-        """cards property, Bag"""
+        """Deck cards property, Bag"""
         return self._cards

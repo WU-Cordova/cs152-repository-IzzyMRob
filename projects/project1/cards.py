@@ -28,7 +28,7 @@ CardFace: dict = { # tuples: (displayed_char, score, *secondary score)
     'JACK' : ('J', 10),
     'QUEEN' : ('Q', 10),
     'KING' : ('K', 10),
-    'ACE' : ('A', 11, 1)
+    'ACE' : ('A', 11)
 }
 
 card_faces: list[str] = [face for face in CardFace]

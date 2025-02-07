@@ -14,6 +14,12 @@ class CardSuit(Enum):
 
 card_suits: list[str] = [suit.value for suit in CardSuit]
 
+# not an enum because duplicate values make aliases that just refer back to the first
+# you can stop it from aliasing with but then you cant iterate through the enum
+# unique() means only one name for any value, opposite of what we need
+# NamedConstant works but you can't iterate through it
+# NoAlias works ut you cant lookup by value
+
 # 13 faces stored in a dictionary + turned into a list of strings
 CardFace: dict = { # tuples: (face, value)
     'TWO' : ('2', 2),

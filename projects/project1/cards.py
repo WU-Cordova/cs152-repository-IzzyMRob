@@ -16,7 +16,6 @@ card_suits: list[str] = [suit.value for suit in CardSuit]
 
 # 13 faces stored in a dictionary + turned into a list of strings
 CardFace: dict = { # tuples: (face, value)
-    'ONE' : ('1', 1),
     'TWO' : ('2', 2),
     'THREE' : ('3', 3),
     'FOUR' : ('4', 4),
@@ -25,6 +24,7 @@ CardFace: dict = { # tuples: (face, value)
     'SEVEN' : ('7', 7),
     'EIGHT' : ('8', 8),
     'NINE' : ('9', 9),
+    'TEN' : ('10', 10),
     'JACK' : ('J', 10),
     'QUEEN' : ('Q', 10),
     'KING' : ('K', 10),

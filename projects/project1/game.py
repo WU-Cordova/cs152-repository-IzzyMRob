@@ -28,13 +28,16 @@ class Game:
         self._player_display: list[list] = []
         self._dealer_display: list[list] = []
         self._player_has_stayed: bool = False
+        self._player_aces: int = 0
+        self._dealer_aces: int = 0
     
     def start_game(self) -> None:
-        """ Starts the game. Algorithm: 
-            1. While no score is above 21, do the following:
-                1.1. Deal 2 cards to player and dealer.
-                1.2. Allow Player to Hit or Stay.
-                1.3. When Player busts/Stays, break the loop.
+        """Starts the game. Algorithm: 
+            1. Deal 2 cards to player and dealer.
+            2. While no score is above 21, do the following:
+                1.1. Allow Player to Hit or Stay.
+                1.2. When Player busts/Stays, break the loop.
+                1.3. Dealer draws required cards.
             2. Print the result of the game.
         """
         # set up
@@ -45,10 +48,10 @@ class Game:
         while running:
             response: str = input("Would you like to (H)it or (S)tay?").upper()
             if response == "H": # give player card, continue loop
-                self.hit()
+                self.hit() # updates score
                 running = self.check_for_end()
             elif response == "S": # dealer draws, 
-                self.stay()
+                self.stay() # updates score
                 running = False
                 self.check_for_end()
             else:
@@ -112,36 +115,28 @@ class Game:
 
     def check_for_end(self) -> bool:
         """Method to check if the game has ended yet. If a score is over 21
-        change any Ace cards from 11 to 1, upate scores.
+        change any Ace cards from 11 to 1, upate scores. Shows scores.
         
         Args:
             None
         Returns:
             Bool: True if the game is still running, False otherwise
         """
-        # if neither has reached 21 the game continues
+        # if neither has reached 21 the game continues as normal
         if self._player_score < 21 and self._dealer_score < 21:
             self.show_scores()
             return True
         
-        # if the hands busted and have aces readjust values to be 1 per Ace instead of 11
-        if self._player_score > 21:
-            for card in self._player_hand:
-                if card.face == "A":
-                    card.value = 1
-        if self._dealer_score > 21:
-            for card in self._dealer_hand:
-                if card.face == "A":
-                    card.value = 1  
-        
-        # recalculate scores
-        self._dealer_score, self._player_score = 0, 0
-        for card in self._dealer_hand:
-            self._dealer_score += card.value
-        for card in self._player_hand:
-            self._player_score += card.value        
+        # if the hands busted and have aces subtract 10 from score and 1 from aces in hand
+        while self._player_score > 21 and self._player_aces > 0:
+            self._player_aces -= 1
+            self._player_score -= 10
 
-        # check again for both hands being under 21
+        while self._dealer_score > 21 and self._dealer_aces > 0:
+            self._dealer_aces -= 1
+            self._dealer_score -= 10
+
+        # check again for both hands being under 21 and continue or not
         if self._player_score <= 21 and self._dealer_score <= 21:
             self.show_scores()
             return True
@@ -186,7 +181,8 @@ class Game:
         Args:
             None
         Returns:
-            None"""
+            None
+        """
         self.player_draw()
     
     def stay(self) -> None:
@@ -202,7 +198,7 @@ class Game:
             self.dealer_draw()
 
     def dealer_draw(self) -> None:
-        """Method to add a card to the dealer's hand. Updates dealer score.
+        """Method to add a card to the dealer's hand. Adds new cards to dealer score.
         
         Args:
             None
@@ -212,9 +208,11 @@ class Game:
         card = self._draw_pile.pop(0)
         self._dealer_hand.append(card)
         self._dealer_score += card.value
+        if card.face == "A":
+            self._dealer_aces += 1
 
     def player_draw(self) -> None:
-        """Method to add a card to the player's hand. Updates player score.
+        """Method to add a card to the player's hand. Adds new cards to player score.
         
         Args:
             None
@@ -224,4 +222,5 @@ class Game:
         card = self._draw_pile.pop(0)
         self._player_hand.append(card)
         self._player_score += card.value
-
+        if card.face == "A":
+            self._player_aces += 1

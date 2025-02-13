@@ -11,6 +11,7 @@ import os
 from typing import Any, Iterator, overload
 import numpy as np
 from numpy.typing import NDArray
+from copy import deepcopy
 
 
 from datastructures.iarray import IArray, T
@@ -20,13 +21,15 @@ class Array(IArray[T]):
 
     def __init__(self, starting_sequence: Sequence[T]=[], data_type: type=object) -> None: 
         # raise errors
-        if not isinstance(starting_sequence, Sequence)
+        if not isinstance(starting_sequence, Sequence):
             raise ValueError("starting_sequence is not a valid sequence")
+        if not isinstance(starting_sequence, data_type):
+            raise TypeError("starting_sequence and data_type do not match")
         if not isinstance(data_type, type):
             raise ValueError("data_type is not a valid data type")
         
         # attributes
-        self.__elements: NDArray = np.empty(self.__logical_size, dtype=self.__data_type)
+        self.__elements: NDArray = np.empty(self.__logical_size, dtype = self.__data_type)
         self.__physical_size: int = len(self.__elements)
         self.__logical_size: int = len(self.__elements)
         self.__data_type = data_type
@@ -36,13 +39,13 @@ class Array(IArray[T]):
     @overload
     def __getitem__(self, index: slice) -> Sequence[T]: ...
     def __getitem__(self, index: int | slice) -> T | Sequence[T]:
-            raise NotImplementedError('Indexing not implemented.')
+            return self.__elements[index]
     
     def __setitem__(self, index: int, item: T) -> None:
-        self.__elements[index] = item
+        self.__elements = np.insert(self.__elements, index, item)
 
     def append(self, data: T) -> None:
-        self.__elements.append(data)
+        self.__elements = np.append(arr = self.__elements, values = data)
 
     def append_front(self, data: T) -> None:
         raise NotImplementedError('Append front not implemented.')
@@ -54,7 +57,7 @@ class Array(IArray[T]):
         raise NotImplementedError('Pop front not implemented.')
 
     def __len__(self) -> int: 
-        raise NotImplementedError('Length not implemented.')
+        return self.__elements.size
 
     def __eq__(self, other: object) -> bool:
         raise NotImplementedError('Equality not implemented.')
@@ -72,7 +75,9 @@ class Array(IArray[T]):
         raise NotImplementedError('Contains not implemented.')
 
     def clear(self) -> None:
-        raise NotImplementedError('Clear not implemented.')
+        self.__elements = np.empty(0, dtype=self.__data_type)
+        self.__logical_size = 0
+        self.__physical_size = 10
 
     def __str__(self) -> str:
         return '[' + ', '.join(str(item) for item in self) + ']'

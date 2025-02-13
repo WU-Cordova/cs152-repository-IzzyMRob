@@ -19,7 +19,17 @@ from datastructures.iarray import IArray, T
 class Array(IArray[T]):  
 
     def __init__(self, starting_sequence: Sequence[T]=[], data_type: type=object) -> None: 
-        raise NotImplementedError('Constructor not implemented.')
+        # raise errors
+        if not isinstance(starting_sequence, Sequence)
+            raise ValueError("starting_sequence is not a valid sequence")
+        if not isinstance(data_type, type):
+            raise ValueError("data_type is not a valid data type")
+        
+        # attributes
+        self.__elements: NDArray = np.empty(self.__logical_size, dtype=self.__data_type)
+        self.__physical_size: int = len(self.__elements)
+        self.__logical_size: int = len(self.__elements)
+        self.__data_type = data_type
 
     @overload
     def __getitem__(self, index: int) -> T: ...
@@ -29,10 +39,10 @@ class Array(IArray[T]):
             raise NotImplementedError('Indexing not implemented.')
     
     def __setitem__(self, index: int, item: T) -> None:
-        raise NotImplementedError('Indexing not implemented.')
+        self.__elements[index] = item
 
     def append(self, data: T) -> None:
-        raise NotImplementedError('Append not implemented.')
+        self.__elements.append(data)
 
     def append_front(self, data: T) -> None:
         raise NotImplementedError('Append front not implemented.')

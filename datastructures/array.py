@@ -63,13 +63,28 @@ class Array(IArray[T]):
         self.__elements[index] = item
 
     def append(self, data: T) -> None:
-        
-        self.__elements = np.append(arr = self.__elements, values = data)
+        # grow storage in nessicary
+        if self.__logical_size == self.__physical_size:
+            self.__physical_size *= 2
+        #save then empty elements
+        elements = deepcopy(self.__elements)
+        self.__elements: NDArray = np.empty(self.__logical_size, dtype = self.__data_type)
+        #re-add saved elements to elements and append new value
+        self.__elements = np.append(arr = elements, values = data)
         self.__logical_size += 1
         self.__physical_size = len(self.__elements)
 
     def append_front(self, data: T) -> None:
-        raise NotImplementedError('Append front not implemented.')
+        # grow storage in nessicary
+        if self.__logical_size == self.__physical_size:
+            self.__physical_size *= 2
+        #save then empty elements
+        elements = deepcopy(self.__elements)
+        self.__elements: NDArray = np.empty(self.__logical_size, dtype = self.__data_type)
+        #append new value and re-add saved elements to elements 
+        self.__elements = np.append(arr = data, values = elements)
+        self.__logical_size += 1
+        self.__physical_size = len(self.__elements)
 
     def pop(self) -> None:
         del self[self.__logical_size - 1]

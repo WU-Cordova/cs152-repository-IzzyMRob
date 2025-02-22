@@ -26,13 +26,14 @@ class IArray2D(Generic[T], ABC):
             but rather as a helper class for the Array2D to provide the second bracket operator.
         """
         @abstractmethod
-        def __init__(self, row_index: int, array: IArray, num_columns: int) -> None:
+        def __init__(self, row_index: int, array: IArray, num_columns: int, data_type: type) -> None:
             """ Initializes the Row object. 
             
             Args:
                 row_index (int): The index of the row in the two-dimensional array.
                 array (IArray): The two-dimensional array that the row belongs to.
                 num_columns (int): The number of columns in the row.
+                data_type (type): The data type of objects in the two-dimensional array.
             """
             ... 
 

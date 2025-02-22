@@ -10,7 +10,7 @@ from datastructures.iarray2d import IArray2D, T
 class Array2D(IArray2D[T]):
 
     class Row(IArray2D.IRow[T]):
-        def __init__(self, row_index: int, array: IArray, num_columns: int) -> None:
+        def __init__(self, row_index: int, array: IArray, num_columns: int, data_type: type) -> None:
             raise NotImplementedError('Row.__init__ not implemented.')
 
         def __getitem__(self, column_index: int) -> T:

@@ -49,7 +49,7 @@ class Array(IArray[T]):
         if isinstance(index, int):
             if index >= len(self.__elements):
                 raise IndexError("Index is out of range.")
-            return self.__elements[index]
+            return self.__elements[index].tolist()
         elif isinstance(index, slice):
             return Array(self.__elements[index].tolist(), self.__data_type)
         else:

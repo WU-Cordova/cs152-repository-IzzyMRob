@@ -5,6 +5,7 @@ from typing import Iterator, Sequence
 from datastructures.iarray import IArray
 from datastructures.array import Array
 from datastructures.iarray2d import IArray2D, T
+from copy import deepcopy
 
 
 class Array2D(IArray2D[T]):
@@ -36,14 +37,14 @@ class Array2D(IArray2D[T]):
             # start - column 0 for this row
             # stop - last column for this
             start = self.map_index(self.__row_index, 0)
-            stop = self.map_index(self.__row_index, self.__num_columns - 1)
-            single_row: list = [self.__array[index] for index in range(start, stop)]
+            stop = self.map_index(self.__row_index, self.__num_columns)
+            single_row: list = [deepcopy(self.__array[index]) for index in range(start, stop)]
             for item in single_row:
                 yield item
         
         def __reversed__(self) -> Iterator[T]:
             # last and first value in the row
-            start = self.map_index(self.__row_index, self.__num_columns - 1)
+            start = self.map_index(self.__row_index, self.__num_columns)
             stop = self.map_index(self.__row_index, 0)
             single_row: list = [self.__array[index] for index in range(start, stop)]
             for item in single_row:
@@ -105,6 +106,7 @@ class Array2D(IArray2D[T]):
    
     def __reversed__(self):
         rows: list = [self.Row(row_index, self.__elements2d, self.__num_cols, self.__data_type) for row_index in range(self.__num_rows)]
+        rows.reverse()
         for row in rows:
             yield row
     

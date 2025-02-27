@@ -11,8 +11,6 @@ class Array2D(IArray2D[T]):
 
     class Row(IArray2D.IRow[T]):
         def __init__(self, row_index: int, array: IArray, num_columns: int, data_type: type) -> None:
-            # raise errors
-            
             # variables
             self.__row_index: int = row_index
             self.__array: IArray = array
@@ -35,21 +33,21 @@ class Array2D(IArray2D[T]):
             self.__array[self.map_index(self.__row_index, column_index)] = value
         
         def __iter__(self) -> Iterator[T]:
+            # start - column 0 for this row
+            # stop - last column for this
             start = self.map_index(self.__row_index, 0)
             stop = self.map_index(self.__row_index, self.__num_columns - 1)
-            single_row: list = []
-            for index in range(start, stop):
-                single_row.append(self.__array[index])
-            return iter(single_row)
+            single_row: list = [self.__array[index] for index in range(start, stop)]
+            for item in single_row:
+                yield item
         
         def __reversed__(self) -> Iterator[T]:
             # last and first value in the row
             start = self.map_index(self.__row_index, self.__num_columns - 1)
-            stop = start - self.__num_columns + 1
-            single_row: list = []
-            for index in range(start, stop):
-                single_row.append(self.__array[index])
-            return iter(single_row)
+            stop = self.map_index(self.__row_index, 0)
+            single_row: list = [self.__array[index] for index in range(start, stop)]
+            for item in single_row:
+                yield item
 
         def __len__(self) -> int:
             return self.__num_columns
@@ -99,13 +97,16 @@ class Array2D(IArray2D[T]):
         return Array2D.Row(row_index, self.__elements2d, self.__num_cols, self.__data_type)
     
     def __iter__(self) -> Iterator[Sequence[T]]:
-        rows: list = [self.Row(row_index, self.__elements2d, self.__num_cols, self.__data_type) for row_index in range(self.__num_cols)]
-        yield iter(rows)
-    
+        # array[row] yields a row object
+        # Row[col] yields the final value in the row
+        rows: list = [self.Row(row_index, self.__elements2d, self.__num_cols, self.__data_type) for row_index in range(self.__num_rows)]
+        for row in rows:
+            yield row
+   
     def __reversed__(self):
-        rows: list = [self.Row(row_index, self.__elements2d, self.__num_cols, self.__data_type) for row_index in range(self.__num_cols)]
-        rows.reverse()
-        yield iter(rows)
+        rows: list = [self.Row(row_index, self.__elements2d, self.__num_cols, self.__data_type) for row_index in range(self.__num_rows)]
+        for row in rows:
+            yield row
     
     def __len__(self): 
         return self.__num_rows

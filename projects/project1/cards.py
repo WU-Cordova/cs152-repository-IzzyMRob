@@ -1,7 +1,7 @@
 # File: cards.py
 
 # Imports
-from aenum import Enum
+from enum import Enum
 
 # Implimentation
 

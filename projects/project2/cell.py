@@ -20,6 +20,22 @@ class Cell(ICell[T]):
         self.col_pos: int = col
         self.alive: bool = alive
 
+    @property
+    def alive(self) -> bool:
+        return self.alive
+    
+    def next_state(self, count) -> bool:
+        # 0 or 1 -> dead
+        if count <= 1:
+            return False
+        # 2 -> no change
+        # 3 -> alive
+        elif count == 3:
+            return True
+        # 4+ -> dead
+        elif count >= 4:
+            return False
+
     def __str__(self) -> str:
         # X means the cell is filled with an alive Cell
         if self.alive:

@@ -29,6 +29,11 @@ class Cell(ICell[T]):
         if count <= 1:
             return False
         # 2 -> no change
+        elif count == 2:
+            if self.alive:
+                return True
+            else:
+                return False
         # 3 -> alive
         elif count == 3:
             return True

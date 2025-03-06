@@ -10,11 +10,11 @@ from projects.project2.grid import Grid
 # GameController class
 class GameController():
     
-    def __init__(self):
-        pass
+    def __init__(self, grid):
+        self.grid: Grid = grid
 
     def run(self):
-        #print the first grid
+        print(self.grid)
         print("Press q to quit.")
 
         #variables
@@ -25,8 +25,15 @@ class GameController():
         while running:
             self.grid.display()
             sleep(1)
+            
+            # check for quit
             if kbhit.kbhit():
                 key =kbhit.getch()
+                if key == "k":
+                    print("You have quit.")
+                    return
+            
+
             #generate next grid
                 #iterate through grid
                 #count neighbors

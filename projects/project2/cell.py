@@ -4,7 +4,6 @@
 from projects.project2.icell import ICell, T
 
 # Implementation
-
 class Cell(ICell[T]):
 
     def __init__(self, row:int, col:int, alive:bool) -> None:
@@ -18,19 +17,24 @@ class Cell(ICell[T]):
         # instance variables
         self.row_pos: int = row
         self.col_pos: int = col
-        self.alive: bool = alive
+        self._alive: bool = alive
 
     @property
     def alive(self) -> bool:
-        return self.alive
+        return 
     
-    def next_state(self, count) -> bool:
+    
+    @alive.setter
+    def alive(self, value:bool) -> None:
+        self._alive = value
+    
+    def next_state(self, count:int) -> bool:
         # 0 or 1 -> dead
         if count <= 1:
             return False
         # 2 -> no change
         elif count == 2:
-            if self.alive:
+            if self._alive:
                 return True
             else:
                 return False
@@ -42,16 +46,17 @@ class Cell(ICell[T]):
             return False
 
     def __str__(self) -> str:
-        # X means the cell is filled with an alive Cell
-        if self.alive:
-            return "X"
+        if self._alive:
+            return 'X'
         else:
             return " "
         
     def __repr__(self) -> str:
-        return f"row: {self.row_pos}, col: {self.col_pos}, alive: {self.alive}"
+        return f"row: {self.row_pos}, col: {self.col_pos}, alive: {self._alive}"
         
-
+    def tolist(self):
+        return self
+    
 # tests for Cell class
 def test_cell_string_repr(): #PASSED
     cell1 = Cell(3, 4, True)

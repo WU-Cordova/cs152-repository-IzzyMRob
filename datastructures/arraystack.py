@@ -1,67 +1,86 @@
+# File: arraystack.py
+
+# Imports
+from copy import deepcopy
 import os
 
 from datastructures.array import Array, T
 from datastructures.istack import IStack
 
+# Implementation
+
+# ArrayStack class
 class ArrayStack(IStack[T]):
-    ''' ArrayStack class that implements the IStack interface. The ArrayStack is a 
-        fixed-size stack that uses an Array to store the items.'''
     
     def __init__(self, max_size: int = 0, data_type=object) -> None:
-        ''' Constructor to initialize the stack 
-        
-            Arguments: 
-                max_size: int -- The maximum size of the stack. 
-                data_type: type -- The data type of the stack.       
-        '''
-        raise NotImplementedError('ArrayStack is not implemented')
+        self._stack:list = Array(data_type=data_type)
+        self._max_size:int = max_size
+        self._data_type:type = data_type
+        self._top_index:int = -1
 
     def push(self, item: T) -> None:
-        raise NotImplementedError
+        #append stack, top index +1
+        if not isinstance(item, self._data_type):
+            raise TypeError("Item must be the same type as the Stack.")
+        self._top_index += 1
+        self._stack.append(item)
 
     def pop(self) -> T:
-       raise NotImplementedError
+       #pop stack, top index -1
+       #handle empty
+       if self._top_index == -1:
+            raise IndexError("Cannot pop when Stack is empty.")
+       self._top_index -= 1
+       self._stack.pop()
 
     def clear(self) -> None:
-       raise NotImplementedError
-    @property
+       #clear stack, top index = 0
+       self._top_index = 0
+       self._stack.clear()
+    
     def peek(self) -> T:
-       raise NotImplementedError
+       #return stack[top index]
+       if self._top_index == -1:
+           raise IndexError("Cannot peek when Stack is empty.")
+       return self._stack[self._top_index]
 
     @property
     def maxsize(self) -> int:
-        ''' Returns the maximum size of the stack. 
-        
-            Returns:
-                int: The maximum size of the stack.
-        '''
-        raise NotImplementedError    
+        #return max size
+        return self._max_size    
+    
     @property
     def full(self) -> bool:
-        ''' Returns True if the stack is full, False otherwise. 
-        
-            Returns:
-                bool: True if the stack is full, False otherwise.
-        '''
-        raise NotImplementedError
+        # top index == len(stack) -1
+        return self._top_index == len(self._stack) - 1
 
     @property
     def empty(self) -> bool:
-        raise NotImplementedError
+        return self._top_index == -1
+    
     def __eq__(self, other: object) -> bool:
-       raise NotImplementedError
+        if not isinstance(other, ArrayStack) and len(self) != len(other):
+            return False
+        self_copy = deepcopy(self)
+        other_copy = deepcopy(other)
+        for i in range(len(self)):
+            if self_copy.pop() != other_copy.pop(): return False
+        return True
 
     def __len__(self) -> int:
-       raise NotImplementedError
+       return len(self._stack)
     
     def __contains__(self, item: T) -> bool:
-       raise NotImplementedError
+       if item in self._stack:
+           return True
+       else:
+           return False
 
     def __str__(self) -> str:
-        return str([self.stack[i] for i in range(self._top)])
+        return str([self._stack[i] for i in range(self._top_index + 1)])
     
     def __repr__(self) -> str:
-        return f"ArrayStack({self.maxsize}): items: {str(self)}"
+        return f"ArrayStack({self._max_size}): items: {str(self)}"
     
 if __name__ == '__main__':
     filename = os.path.basename(__file__)

@@ -23,8 +23,9 @@ class Array(IArray[T]):
         # raise errors
         if not isinstance(starting_sequence, Sequence):
             raise ValueError("starting_sequence is not a valid sequence")
-        if not isinstance(starting_sequence[0], data_type):
-            raise TypeError("starting_sequence and data_type do not match")
+        if starting_sequence:
+            if not isinstance(starting_sequence[0], data_type):
+                raise TypeError("starting_sequence and data_type do not match")
         if not isinstance(data_type, type):
             raise ValueError("data_type is not a valid data type")
 

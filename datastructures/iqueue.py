@@ -8,6 +8,17 @@ class IQueue(Generic[T]):
 
     @abstractmethod
     def enqueue(self, item: T) -> None:
+        """Initializes the CircularQueue object with a maxsize and data_type.
+        Args:
+            maxsize (int): The maximum size of the queue
+            data_type (type): The type of the elements in the queue
+        Returns:
+            None
+        Raises:
+            TypeError:
+                maxsize must be an integer
+                data_type must be a type
+        """
         ...
 
     @abstractmethod

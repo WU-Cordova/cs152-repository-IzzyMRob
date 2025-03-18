@@ -13,17 +13,18 @@ from datastructures.istack import IStack
 class ArrayStack(IStack[T]):
     
     def __init__(self, max_size: int = 0, data_type=object) -> None:
-        self._stack:list = Array(data_type=data_type)
+        array = [data_type()] * max_size
+        self._stack:list = Array(starting_sequence=array, data_type=data_type)
         self._max_size:int = max_size
         self._data_type:type = data_type
-        self._top_index:int = -1
+        self._top_index:int = -1 # index of the last object
 
     def push(self, item: T) -> None:
         #append stack, top index +1
         if not isinstance(item, self._data_type):
             raise TypeError("Item must be the same type as the Stack.")
         self._top_index += 1
-        self._stack.append(item)
+        self._stack[self._top_index] = item
 
     def pop(self) -> T:
        #pop stack, top index -1
@@ -31,7 +32,7 @@ class ArrayStack(IStack[T]):
        if self._top_index == -1:
             raise IndexError("Cannot pop when Stack is empty.")
        self._top_index -= 1
-       self._stack.pop()
+       self._stack.pop(self._top_index)
 
     def clear(self) -> None:
        #clear stack, top index = 0
@@ -59,18 +60,26 @@ class ArrayStack(IStack[T]):
         return self._top_index == -1
     
     def __eq__(self, other: object) -> bool:
-        if not isinstance(other, ArrayStack) and len(self) != len(other):
+        # not an Array, diff lengths, diff max sizes
+        if not isinstance(other, ArrayStack):
             return False
+        if len(self) != len(other):
+            return False
+        # copy, compare each element
         self_copy = deepcopy(self)
         other_copy = deepcopy(other)
         for i in range(len(self)):
-            if self_copy.pop() != other_copy.pop(): return False
+            if self_copy.pop() != other_copy.pop(): 
+                return False
         return True
+    
 
     def __len__(self) -> int:
-       return len(self._stack)
+       return self._top_index + 1
     
     def __contains__(self, item: T) -> bool:
+       if not isinstance(item, self._data_type):
+           raise TypeError("Item must be the same type as the Stack.")
        if item in self._stack:
            return True
        else:

@@ -13,16 +13,24 @@ from datastructures.istack import IStack
 class ArrayStack(IStack[T]):
     
     def __init__(self, max_size: int = 0, data_type=object) -> None:
+        if not isinstance(max_size, int):
+            raise TypeError("max_size must be an integer")
+        if not isinstance(data_type, type):
+            raise TypeError("data_type must be a type")
         array = [data_type()] * max_size
-        self._stack:list = Array(starting_sequence=array, data_type=data_type)
+        self._default = array[0]
+        self._stack:Array = Array(starting_sequence=array, data_type=data_type)
         self._max_size:int = max_size
         self._data_type:type = data_type
         self._top_index:int = -1 # index of the last object
 
     def push(self, item: T) -> None:
         #append stack, top index +1
+        #handle wrong type, stack full
         if not isinstance(item, self._data_type):
             raise TypeError("Item must be the same type as the Stack.")
+        if self._top_index == self._max_size:
+            raise IndexError("Stack is full")
         self._top_index += 1
         self._stack[self._top_index] = item
 
@@ -31,14 +39,17 @@ class ArrayStack(IStack[T]):
        #handle empty
        if self._top_index == -1:
             raise IndexError("Cannot pop when Stack is empty.")
+       top = self._stack[self._top_index]
+       self._stack[self._top_index] = self._default
        self._top_index -= 1
-       self._stack.pop(self._top_index)
+       return top
 
     def clear(self) -> None:
        #clear stack, top index = 0
-       self._top_index = 0
+       self._top_index = -1
        self._stack.clear()
     
+    @property
     def peek(self) -> T:
        #return stack[top index]
        if self._top_index == -1:
@@ -62,7 +73,7 @@ class ArrayStack(IStack[T]):
     def __eq__(self, other: object) -> bool:
         # not an Array, diff lengths, diff max sizes
         if not isinstance(other, ArrayStack):
-            return False
+            raise TypeError("Both items must be stacks.")
         if len(self) != len(other):
             return False
         # copy, compare each element
@@ -78,6 +89,7 @@ class ArrayStack(IStack[T]):
        return self._top_index + 1
     
     def __contains__(self, item: T) -> bool:
+       #handle wrong type
        if not isinstance(item, self._data_type):
            raise TypeError("Item must be the same type as the Stack.")
        if item in self._stack:

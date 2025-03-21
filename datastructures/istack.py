@@ -38,6 +38,8 @@ class IStack(Generic[T], ABC):
         Raises:
             TypeError:
                 item must be of type data_type
+            IndexError:
+                stack cannot be full
         """
         ...
 
@@ -55,8 +57,21 @@ class IStack(Generic[T], ABC):
         ...
 
     @abstractmethod
+    def clear(self) -> None:
+        """Method to empty the contents of the stack
+        Args:
+            None
+        Returns:
+            None
+        Raises:
+            None
+        """
+        ...
+
+    @property
+    @abstractmethod
     def peek(self) -> T:
-        """Method to look at the item on top of the Stack
+        """Method to look at the item on top of the Stack without removing it
         Args:
             None
         Returns:
@@ -64,6 +79,32 @@ class IStack(Generic[T], ABC):
         Raises:
             IndexError:
                 Cannot pop when stack is empty
+        """
+        ...
+
+    @property
+    @abstractmethod
+    def maxsize(self) -> int:
+        """Property to get the max size of the stack
+        Args:
+            None
+        Returns:
+            int: The max size of the stack
+        Raises:
+            None
+        """
+        ...
+
+    @property
+    @abstractmethod
+    def full(self) -> bool:
+        """Property to check if the stack is full
+        Args:
+            None
+        Returns:
+            bool: True of the stack is full, False otherwise
+        Raises:
+            None
         """
         ...
 
@@ -81,31 +122,6 @@ class IStack(Generic[T], ABC):
         ...
 
     @abstractmethod
-    def clear(self) -> None:
-        """Method to empty the contents of the stack
-        Args:
-            None
-        Returns:
-            None
-        Raises:
-            None
-        """
-        ...
-    
-    @abstractmethod
-    def __contains__(self, item: T) -> bool:
-        """Method to look at the item on top of the Stack
-        Args:
-            None
-        Returns:
-            None
-        Raises:
-            IndexError:
-                Cannot pop when stack is empty
-        """
-        ...
-    
-    @abstractmethod
     def __eq__(self, other: object) -> bool:
         """Method to check if two stacks are equal to each other. Checks for equal max_size and elements
         Args:
@@ -113,7 +129,8 @@ class IStack(Generic[T], ABC):
         Returns:
             bool: True of the stacks are the same, False otherwise
         Raises:
-            None
+            TypeError:
+                other must be a ArrayStack
         """
         ...
 
@@ -128,6 +145,20 @@ class IStack(Generic[T], ABC):
             None
         """
         ...
+    
+    @abstractmethod
+    def __contains__(self, item: T) -> bool:
+        """Method to check if an item is in the stack
+        Args:
+            None
+        Returns:
+            bool: True if the item is in the stack, False otherwise
+        Raises:
+            TypeError:
+                item must be the same type as the rest of the stack
+        """
+        ...
+    
 
     @abstractmethod
     def __str__(self) -> str:

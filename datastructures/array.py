@@ -36,7 +36,7 @@ class Array(IArray[T]):
         self.__physical_size: int = len(self.__elements) #allocated storage
         
         # loop through all items in array and add all to elements
-        for index, item in enumerate(starting_sequence):
+        for index, item in enumerate(deepcopy(starting_sequence)):
             # doesn't deep copy complex things because it refers back to og
             self.__elements[index] = deepcopy(item)
 
@@ -50,9 +50,9 @@ class Array(IArray[T]):
         if isinstance(index, int):
             if index >= len(self.__elements):
                 raise IndexError("Index is out of range.")
-            return self.__elements[index].tolist()
+            return self.__elements[index]
         elif isinstance(index, slice):
-            return Array(self.__elements[index].tolist(), self.__data_type)
+            return slice(self.__elements[index].tolist(), self.__data_type)
         else:
             raise TypeError("Index is not a slice or integer.")
 

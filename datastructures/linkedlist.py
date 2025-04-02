@@ -22,6 +22,7 @@ class LinkedList[T](ILinkedList[T]):
         self._count = 0
         self.head: LinkedList.Node | None = None
         self.tail: LinkedList.Node | None = None
+        self._counter: int = 0
 
     @staticmethod
     def from_sequence(sequence: Sequence[T], data_type: type=object) -> LinkedList[T]:
@@ -47,13 +48,62 @@ class LinkedList[T](ILinkedList[T]):
         self._count += 1
 
     def prepend(self, item: T) -> None:
-        raise NotImplementedError("LinkedList.prepend is not implemented")
+        if not isinstance(item, self._data_type):
+            raise TypeError("item must be of type data_type")
+        new_node: LinkedList.Node = LinkedList.Node(data=item)
+        if self.empty:
+            self.head = self.tail = new_node
+        else:
+            self.head.previous = new_node
+            new_node.next = self.head
+            self.head = new_node
+        self._count += 1
 
     def insert_before(self, target: T, item: T) -> None:
-        raise NotImplementedError("LinkedList.insert_before is not implemented")
+        if self.empty:
+            raise IndexError("LinkedList is empty")
+        if not isinstance(target, self._data_type):
+            raise TypeError("Target must be the same type as the rest of the LinkedList")
+        if not isinstance(item, self._data_type):
+            raise TypeError("Item must be the same type as the rest of the LinkedList")
+        if not target in self:
+            raise ValueError("Target not found in LinkedList")
+        # search until current is target
+        current = self.head
+        while current != None:
+            if current.data == target:
+                break
+            current = current.next
+        # insert before
+        new_node: LinkedList.Node = LinkedList.Node(data=item)
+        new_node.previous = current.previous # D <- O
+        current.previous.next = new_node # D -> O
+        current.previous = new_node # O <- G
+        new_node.next = current # O -> G
+        self._count += 1
 
     def insert_after(self, target: T, item: T) -> None:
-        raise NotImplementedError("LinkedList.insert_after is not implemented")
+        if self.empty:
+            raise IndexError("LinkedList is empty")
+        if not isinstance(target, self._data_type):
+            raise TypeError("Target must be the same type as the rest of the LinkedList")
+        if not isinstance(item, self._data_type):
+            raise TypeError("Item must be the same type as the rest of the LinkedList")
+        if not target in self:
+            raise ValueError("Target not found in LinkedList")
+        # search until current is target
+        current = self.head
+        while current != None:
+            if current.data == target:
+                break
+            current = current.next
+        # insert after
+        new_node: LinkedList.Node = LinkedList.Node(data=item)
+        new_node.next = current.next
+        current.next.previous = new_node
+        current.next = new_node
+        new_node.previous = current
+        self._count += 1
 
     def remove(self, item: T) -> None:
         raise NotImplementedError("LinkedList.remove is not implemented")
@@ -94,14 +144,18 @@ class LinkedList[T](ILinkedList[T]):
         self.tail = None
 
     def __contains__(self, item: T) -> bool:
-        pass
+        current = self.head
+        while current != None:
+            if current.data == item:
+                return True
+            current = current.next
 
     def __iter__(self) -> ILinkedList[T]:
-        raise NotImplementedError("LinkedList.__iter__ is not implemented")
+        return self
 
     def __next__(self) -> T:
-        raise NotImplementedError("LinkedList.__next__ is not implemented")
-    
+
+          
     def __reversed__(self) -> ILinkedList[T]:
         raise NotImplementedError("LinkedList.__reversed__ is not implemented")
     
@@ -122,7 +176,7 @@ class LinkedList[T](ILinkedList[T]):
         while current:
             items.append(repr(current.data))
             current = current.next
-        return f"LinkedList({' <-> '.join(items)}) Count: {self.count}"
+        return f"LinkedList({' <-> '.join(items)}) Count: {self._count}"
 
 
 if __name__ == '__main__':

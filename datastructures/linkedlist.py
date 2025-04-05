@@ -18,11 +18,10 @@ class LinkedList[T](ILinkedList[T]):
         previous: Optional[LinkedList.Node] = None
 
     def __init__(self, data_type: type = object) -> None:
-        self._data_type = data_type
-        self._count = 0
+        self._data_type: type = data_type
+        self._count: int = 0
         self.head: LinkedList.Node | None = None
         self.tail: LinkedList.Node | None = None
-        self._counter: int = 0
 
     @staticmethod
     def from_sequence(sequence: Sequence[T], data_type: type=object) -> LinkedList[T]:
@@ -106,17 +105,56 @@ class LinkedList[T](ILinkedList[T]):
         self._count += 1
 
     def remove(self, item: T) -> None:
-        raise NotImplementedError("LinkedList.remove is not implemented")
+        if self.empty:
+            raise IndexError("Cannot remove when the LinkedList is empty")
+        if not item in self:
+            raise ValueError("Cannot remove item not in LinkedList")
+        for node in self:
+            if node.data == item:
+                self._count -= 1
+                #remove
+                #return
 
     def remove_all(self, item: T) -> None:
-        raise NotImplementedError("LinkedList.remove_all is not implemented")
+        if self.empty:
+            raise IndexError("Cannot remove when the LinkedList is empty")
+        if not item in self:
+            raise ValueError("Cannot remove item not in LinkedList")
+        while self.head.data == item:
+            self.pop_front()
+        while self.tail.data == item:
+            self.pop()
+        while self.travel_node is not None:
+            if self.travel_node.data == item
+                self.travel_node.previous.next = self.travel_node.next
+                self.travel_node.next.previous = self.travel_node.previous
+                count -= 1
+                    #remove
 
     def pop(self) -> T:
-        raise NotImplementedError("LinkedList.pop is not implemented")
-
+        if self.empty:
+            raise IndexError("Cannot pop when LinkedList is empty.")
+        data = self.tail.data
+        if len(self) == 1: # head and tail are the same Node
+            self.head = self.tail = None
+        else:
+            self.tail = self.tail.previous
+            self.tail.next = None
+        self._count -= 1
+        return data
+        
     def pop_front(self) -> T:
-        raise NotImplementedError("LinkedList.pop_front is not implemented")
-
+        if self.empty:
+            raise IndexError("Cannot pop when LinkedList is empty.")
+        data = self.head.data
+        if len(self) == 1: # head and tail are the same Node
+            self.head = self.tail = None
+        else:
+            self.head = self.head.next
+            self.head.previous = None
+        self._count -= 1
+        return data
+    
     @property
     def front(self) -> T:
         if self.empty:
@@ -151,10 +189,15 @@ class LinkedList[T](ILinkedList[T]):
             current = current.next
 
     def __iter__(self) -> ILinkedList[T]:
+        self.travel_node = self.head
         return self
 
     def __next__(self) -> T:
-
+        if self.travel_node is None:
+            raise StopIteration
+        data = self.travel_node.data
+        self.travel_node = self.travel_node.next
+        return data
           
     def __reversed__(self) -> ILinkedList[T]:
         raise NotImplementedError("LinkedList.__reversed__ is not implemented")

@@ -2,6 +2,7 @@
 
 # Imports
 from __future__ import annotations
+from copy import deepcopy
 from dataclasses import dataclass
 import os
 from typing import Optional, Sequence
@@ -105,17 +106,25 @@ class LinkedList[T](ILinkedList[T]):
         self._count += 1
 
     def remove(self, item: T) -> None:
+        if not isinstance(item, self._data_type):
+            raise TypeError("item must be of type data_type")
         if self.empty:
             raise IndexError("Cannot remove when the LinkedList is empty")
         if not item in self:
             raise ValueError("Cannot remove item not in LinkedList")
-        for node in self:
-            if node.data == item:
+        self.travel_node = self.head
+        running = True
+        while running:
+            if self.travel_node.data == item:
+                self.travel_node.previous.next = self.travel_node.next
+                self.travel_node.next.previous = self.travel_node.previous
                 self._count -= 1
-                #remove
-                #return
+                running = False
+            self.travel_node = self.travel_node.next
 
     def remove_all(self, item: T) -> None:
+        if not isinstance(item, self._data_type):
+            raise TypeError("item must be of type data_type")
         if self.empty:
             raise IndexError("Cannot remove when the LinkedList is empty")
         if not item in self:
@@ -124,11 +133,13 @@ class LinkedList[T](ILinkedList[T]):
             self.pop_front()
         while self.tail.data == item:
             self.pop()
+        self.travel_node = self.head
         while self.travel_node is not None:
-            if self.travel_node.data == item
+            if self.travel_node.data == item:
                 self.travel_node.previous.next = self.travel_node.next
                 self.travel_node.next.previous = self.travel_node.previous
-                count -= 1
+                self._count -= 1
+            self.travel_node = self.travel_node.next
                     #remove
 
     def pop(self) -> T:
@@ -200,10 +211,18 @@ class LinkedList[T](ILinkedList[T]):
         return data
           
     def __reversed__(self) -> ILinkedList[T]:
-        raise NotImplementedError("LinkedList.__reversed__ is not implemented")
+        new = LinkedList()
+        for i in range(len(self)):
+            new.append(self.pop())
+        return new
     
     def __eq__(self, other: object) -> bool:
-        raise NotImplementedError("LinkedList.__eq__ is not implemented")
+        self_copy = deepcopy(self)
+        other_copy = deepcopy(other)
+        for i in range(len(self_copy)):
+            if self_copy.pop() != other_copy.pop():
+                return False
+            return True
 
     def __str__(self) -> str:
         items = []

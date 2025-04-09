@@ -98,7 +98,7 @@ class ArrayStack(IStack[T]):
            return False
 
     def __str__(self) -> str:
-        return str([self._stack[i] for i in range(self._top_index + 1)])
+        return str([int(self._stack[i]) for i in range(self._top_index + 1)])
     
     def __repr__(self) -> str:
         return f"ArrayStack({self._max_size}): items: {str(self)}"

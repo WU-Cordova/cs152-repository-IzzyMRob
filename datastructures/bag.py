@@ -34,7 +34,7 @@ class Bag(IBag[T]):
         # if it's in the bag and there is at least one of them
         if item in self.__bag and self.__bag[item] > 0:
             self.__bag[item] -= 1
-            self._keys.pop(item)
+            self._keys.remove(item)
         else:
             raise ValueError(f"There is no {item} in the bag!")
         

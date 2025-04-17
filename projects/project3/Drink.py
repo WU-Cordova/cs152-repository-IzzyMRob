@@ -2,7 +2,16 @@
 
 # Imports
 
-# Implemetation
+# Constants
+price_key: dict[str,dict[str,float]] = {
+    'Latte':{'S':4.5,'M':5,'L':5.5},
+    'Matcha':{'S':5,'M':5.5,'L':6},
+    'Hot Cocoa':{'S':3.5,'M':4,'L':4.5},
+    'London Fog':{'S':14.75,'M':5.25,'L':5.75},
+    'Red Bull Fusion':{'S':3.75,'M':4.25,'L':4.75}
+}
+
+# Implementation
 
 class Drink():
     def __init__(self, name:str, size:str='Medium', custom:str=None):
@@ -34,24 +43,18 @@ class Drink():
         # instance variables
         self.name: str = name
         self.size: str = size
-        self.price: int = price_key[name][size]
+        self.price: float = price_key[name][size]
         self.customization: str = custom
-    
+
+    def __str__(self) -> str:
+        return f"{self.size} {self.name} {self.customization} ({self.price})"
+
     #properties
-    @property
     def name(self) -> str:
         return self.name
-    @property
     def size(self) -> str:
         return self.size
-    @property
-    def price(self) -> int:
+    def price(self) -> float:
         return self.price
-    @property
     def customization(self) -> str:
         return self.customization
-
-
-price_key: dict[str,dict[str,int]] = {
-    'name':{'S':1,'M':1,'L':1}
-}

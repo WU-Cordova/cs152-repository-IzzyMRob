@@ -1,7 +1,8 @@
-# File: Day.py
+# File: BistroSystem.py
 
 # Imports
 from datastructures.array import Array
+from datastructures.circularqueue import CircularQueue
 from projects.project3.Drink import Drink
 from projects.project3.CustomerOrder import CustomerOrder
 
@@ -19,7 +20,7 @@ main_menu_text = [
 
 # Implementation
 
-class Day():
+class BistroSystem():
     def __init__(self, menu:list):
         """Constructor function for the Day class.
         Args:
@@ -32,7 +33,7 @@ class Day():
         """
         # instance variables
         self.menu: list[str] = menu
-        self.in_progress_orders: Array[CustomerOrder] = Array(data_type=CustomerOrder)
+        self.in_progress_orders: CircularQueue[CustomerOrder] = CircularQueue()
         self.completed_orders: Array[CustomerOrder] = Array(data_type=CustomerOrder)
 
     def start(self):
@@ -76,13 +77,14 @@ class Day():
             size = input(f"What size do you want your {name}? (S/M/L) ").upper()
             customization = input(f"Please input any customizations to your {size} {name}. ")
             current_order.add(Drink(name, size, customization))
+            print("")
             print("Your current order:")
             print(current_order)
             complete = input("Is this order complete? (Y/N)").upper()
             if complete =='Y':
                 finished = True
         print(f"Your order is complete! Total price: ${current_order.get_total_price()}")
-        self.in_progress_orders.append(current_order)
+        self.in_progress_orders.enqueue(current_order)
         self.disp_main_menu()
 
 def multi_print(text):

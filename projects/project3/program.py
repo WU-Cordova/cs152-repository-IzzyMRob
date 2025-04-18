@@ -1,7 +1,7 @@
 # File: program.py
 
 # Imports
-from projects.project3.Day import Day
+from projects.project3.BistroSystem import BistroSystem
 from datastructures.array import Array
 
 # Constants
@@ -12,7 +12,7 @@ drinks: list = ["Latte", "Matcha", "Hot Cocoa", "London Fog", "Red Bull Fusion"]
 def main():
 
     menu:Array = Array(drinks)
-    day = Day(menu)
+    day = BistroSystem(menu)
     day.start()
 
 

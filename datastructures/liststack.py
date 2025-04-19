@@ -1,10 +1,10 @@
 from copy import deepcopy
 import os
-from datastructures.istack import IStack
+from datastructures.istack_copy import IStack
 from typing import Generic
 from datastructures.linkedlist import LinkedList, T
 
-class ListStack():
+class ListStack(IStack(T)):
     """
     ListStack (LinkedList-based Stack)
 

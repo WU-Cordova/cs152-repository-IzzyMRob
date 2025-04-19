@@ -4,7 +4,7 @@ from datastructures.istack import IStack
 from typing import Generic
 from datastructures.linkedlist import LinkedList, T
 
-class ListStack(IStack[T]):
+class ListStack():
     """
     ListStack (LinkedList-based Stack)
 

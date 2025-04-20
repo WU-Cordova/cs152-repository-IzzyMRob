@@ -33,7 +33,7 @@ class BistroSystem():
         """
         # instance variables
         self.menu: list[str] = menu
-        self.in_progress_orders: CircularQueue[CustomerOrder] = CircularQueue()
+        self.in_progress_orders: CircularQueue[CustomerOrder] = CircularQueue(10)
         self.completed_orders: Array[CustomerOrder] = Array(data_type=CustomerOrder)
         self.drink_counts = {
             "Latte": [0, 0],
@@ -113,6 +113,8 @@ class BistroSystem():
         choice = input("Press 'c' to mark an order as complete, or 'm' to go to the main menu.").upper()
         if choice == 'C':
             self.disp_mark_order_complete()
+        elif choice == 'M':
+            self.disp_main_menu()
 
     def disp_mark_order_complete(self):
         print("")
@@ -122,6 +124,7 @@ class BistroSystem():
         if choice == 'Y':
             self.mark_next_complete()
             print("Marked as complete!")
+            self.disp_main_menu()
         elif choice == 'M':
             self.disp_main_menu()
 
@@ -132,7 +135,7 @@ class BistroSystem():
         print("")
         print("End of Day Report:")
         print("drink name - number sold - sales")
-        for key,value in self.drink_counts:
+        for key,value in self.drink_counts.items():
             print (f"{key}: {value}")
 
 

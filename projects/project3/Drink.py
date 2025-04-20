@@ -47,7 +47,7 @@ class Drink():
         self.customization: str = custom
 
     def __str__(self) -> str:
-        return f"{self.size} {self.name} {self.customization} ({self.price})"
+        return f"{self.size} {self.name}, {self.customization} (${self.price})"
 
     #properties
     def name(self) -> str:

@@ -35,6 +35,13 @@ class BistroSystem():
         self.menu: list[str] = menu
         self.in_progress_orders: CircularQueue[CustomerOrder] = CircularQueue()
         self.completed_orders: Array[CustomerOrder] = Array(data_type=CustomerOrder)
+        self.drink_counts = {
+            "Latte": [0, 0],
+            "Matcha": [0, 0], 
+            "Hot Cocoa": [0, 0], 
+            "London Fog": [0, 0], 
+            "Red Bull Fusion": [0, 0]
+        }
 
     def start(self):
         print(welcome_text)
@@ -48,6 +55,12 @@ class BistroSystem():
             self.display_menu()
         elif choice == '2':
             self.disp_take_new_order()
+        elif choice == '3':
+            self.disp_open_orders()
+        elif choice == '4':
+            self.disp_mark_order_complete()
+        elif choice == '5':
+            self.exit()
 
     def disp_numbered_drinks(self):
         count = 0
@@ -74,18 +87,54 @@ class BistroSystem():
             self.disp_numbered_drinks()
             choice = input("Which drink would you like? ")
             name = self.menu[int(choice) - 1]
+            self.drink_counts[name][0] += 1
             size = input(f"What size do you want your {name}? (S/M/L) ").upper()
             customization = input(f"Please input any customizations to your {size} {name}. ")
-            current_order.add(Drink(name, size, customization))
+            drink = Drink(name, size, customization)
+            self.drink_counts[name][1] += drink.price
+            current_order.add(drink)
             print("")
             print("Your current order:")
             print(current_order)
             complete = input("Is this order complete? (Y/N)").upper()
-            if complete =='Y':
+            if complete == 'Y':
                 finished = True
         print(f"Your order is complete! Total price: ${current_order.get_total_price()}")
         self.in_progress_orders.enqueue(current_order)
         self.disp_main_menu()
+
+    def disp_open_orders(self):
+        print("")
+        print("Current Open Orders:")
+        count = 0
+        for order in self.in_progress_orders:
+            count += 1
+            print(f"{count}. {order}")
+        choice = input("Press 'c' to mark an order as complete, or 'm' to go to the main menu.").upper()
+        if choice == 'C':
+            self.disp_mark_order_complete()
+
+    def disp_mark_order_complete(self):
+        print("")
+        print('Would you like to mark this order as complete?')
+        print(self.in_progress_orders.front)
+        choice = input("Press 'y' to complete this order, or 'm' to return to the main menu.").upper()
+        if choice == 'Y':
+            self.mark_next_complete()
+            print("Marked as complete!")
+        elif choice == 'M':
+            self.disp_main_menu()
+
+    def mark_next_complete(self):
+        self.completed_orders.append(self.in_progress_orders.dequeue())
+
+    def exit(self):
+        print("")
+        print("End of Day Report:")
+        print("drink name - number sold - sales")
+        for key,value in self.drink_counts:
+            print (f"{key}: {value}")
+
 
 def multi_print(text):
     for line in text:

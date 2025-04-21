@@ -121,11 +121,15 @@ class BistroSystem():
         print('Would you like to mark this order as complete?')
         print(self.in_progress_orders.front)
         choice = input("Press 'y' to complete this order, or 'm' to return to the main menu.").upper()
-        if choice == 'Y':
-            self.mark_next_complete()
-            print("Marked as complete!")
-            self.disp_main_menu()
-        elif choice == 'M':
+        if not self.in_progress_orders.empty:
+            if choice == 'Y':
+                self.mark_next_complete()
+                print("Marked as complete!")
+                self.disp_main_menu()
+            elif choice == 'M':
+                self.disp_main_menu()
+        else:
+            print("There are no open orders.")
             self.disp_main_menu()
 
     def mark_next_complete(self):

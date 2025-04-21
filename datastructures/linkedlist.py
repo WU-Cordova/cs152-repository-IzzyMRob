@@ -198,6 +198,7 @@ class LinkedList[T](ILinkedList[T]):
             if current.data == item:
                 return True
             current = current.next
+        return False
 
     def __iter__(self) -> ILinkedList[T]:
         self.travel_node = self.head

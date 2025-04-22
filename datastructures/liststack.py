@@ -1,10 +1,10 @@
 from copy import deepcopy
 import os
-from datastructures.istack_copy import IStack
+from datastructures.istack import IStack
 from typing import Generic
 from datastructures.linkedlist import LinkedList, T
 
-class ListStack(IStack(T)):
+class ListStack(Generic[T]):
     """
     ListStack (LinkedList-based Stack)
 
@@ -44,7 +44,7 @@ class ListStack(IStack(T)):
         Raises:
             IndexError: If the stack is empty.
         """
-        return self.stack.pop()
+        return self.stack.pop_front()
 
     def peek(self) -> T:
         """
@@ -56,7 +56,9 @@ class ListStack(IStack(T)):
         Raises:
             IndexError: If the stack is empty.
         """
-        return self.stack.tail
+        if len(self) == 0:
+            raise IndexError("Cannot peek when Stack is empty.")
+        return self.stack.front
 
     @property
     def empty(self) -> bool:

@@ -10,43 +10,91 @@ from datastructures.linkedlist import LinkedList
 class HashMap(IHashMap[KT, VT]):
 
     def __init__(self, number_of_buckets=7, load_factor=0.75, custom_hash_function: Optional[Callable[[KT], int]]=None) -> None:
-        raise NotImplementedError("HashMap.__init__() is not implemented yet.")
+        self._buckets: Array[LinkedList[Tuple[KT,VT]]] = \
+            Array(
+                starting_sequence=[LinkedList(data_type=tuple) for _ in range(number_of_buckets)],
+                data_type=LinkedList
+            )
+        self._count: int = 0
+        self._load_factor_threshold: float = load_factor
+        self._hash_function = custom_hash_function or self._default_hash_function
+
+    def _get_bucket_index(self, key: KT, num_buckets: int) -> int:
+        hash_result = self._hash_function(key)
+        return hash_result % num_buckets
 
     def __getitem__(self, key: KT) -> VT:
-        raise NotImplementedError("HashMap.__getitem__() is not implemented yet.")
+        bucket_index: int = self._get_bucket_index(key, len(self._buckets))
+        bucket_chain: LinkedList = self._buckets[bucket_index]
+        for (k,v) in bucket_chain:
+            if k == key:
+                return v
+        raise KeyError("Key is not in HashMap")
 
     def __setitem__(self, key: KT, value: VT) -> None:        
-        raise NotImplementedError("HashMap.__setitem__() is not implemented yet.")
+        bucket_index: int = self._get_bucket_index(key, len(self._buckets))
+        bucket_chain: LinkedList = self._buckets[bucket_index]
+        for (k,v) in bucket_chain:
+            if k == key:
+                v = value
+            else:
+                bucket_chain.append((key, value))
+        self._count += 1
 
     def keys(self) -> Iterator[KT]:
-        raise
+        keys = []
+        for bucket in self._buckets:
+            for node in bucket:
+                keys.append(node[0])
+        return iter(keys)
     
     def values(self) -> Iterator[VT]:
-        raise NotImplementedError("HashMap.values() is not implemented yet.")
-
+        values = []
+        for bucket in self._buckets:
+            for node in bucket:
+                values.append(node[1])
+        return iter(values)
+    
     def items(self) -> Iterator[Tuple[KT, VT]]:
-        raise NotImplementedError("HashMap.items() is not implemented yet.")
-            
+        items = []
+        for bucket in self._buckets:
+            for node in bucket:
+                items.append(node)
+        return iter(items)
+                
     def __delitem__(self, key: KT) -> None:
         raise NotImplementedError("HashMap.__delitem__() is not implemented yet.")
     
     def __contains__(self, key: KT) -> bool:
-        raise NotImplementedError("HashMap.__contains__() is not implemented yet.")
+        bucket_index: int = self._get_bucket_index(key, len(self._buckets))
+        bucket_chain: LinkedList = self._buckets[bucket_index]
+        for (k,v) in bucket_chain:
+            if k == key:
+                return True
+        return False
     
     def __len__(self) -> int:
-        raise NotImplementedError("HashMap.__len__() is not implemented yet.")
+        return self._count
     
     def __iter__(self) -> Iterator[KT]:
-        raise NotImplementedError("HashMap.__iter__() is not implemented yet.")
-    
+        for bucket in self._buckets:
+            for node in bucket:
+                yield node[0]
+
     def __eq__(self, other: object) -> bool:
         raise NotImplementedError("HashMap.__eq__() is not implemented yet.")
 
     def __str__(self) -> str:
-        return "{" + ", ".join(f"{key}: {value}" for key, value in self) + "}"
+        return "{" + ", ".join(f"{key}: {value}" for key, value in self._buckets) + "}"
     
     def __repr__(self) -> str:
         return f"HashMap({str(self)})"
+    
+    def _resize(self) -> None:
+        temp_buckets = self._buckets
+        # find next doubled prime number
+        # init new empty bucket list
+        # move all items over
 
     @staticmethod
     def _default_hash_function(key: KT) -> int:

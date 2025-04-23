@@ -4,6 +4,7 @@ from datastructures.ihashmap import KT, VT, IHashMap
 from datastructures.array import Array
 import pickle
 import hashlib
+import math
 
 from datastructures.linkedlist import LinkedList
 
@@ -63,8 +64,12 @@ class HashMap(IHashMap[KT, VT]):
         return iter(items)
                 
     def __delitem__(self, key: KT) -> None:
-        raise NotImplementedError("HashMap.__delitem__() is not implemented yet.")
-    
+        for bucket in self._buckets:
+            if key in bucket:
+                bucket.remove(key)
+            else:
+                raise KeyError("Key is not in HashMap")
+
     def __contains__(self, key: KT) -> bool:
         bucket_index: int = self._get_bucket_index(key, len(self._buckets))
         bucket_chain: LinkedList = self._buckets[bucket_index]
@@ -117,3 +122,31 @@ class HashMap(IHashMap[KT, VT]):
         except Exception:
             key_bytes = repr(key).encode()
         return int(hashlib.md5(key_bytes).hexdigest(), 16)
+    
+def get_next_prime(current) -> int:
+
+    def isPrime(n):
+        
+        if n <= 1:
+            return False
+        if n <= 3:
+            return True
+        if n % 2 == 0 or n % 3 == 0:
+            return False
+        for i in range(5,int(math.sqrt(n) + 1), 6): 
+            if n % i == 0 or n % (i + 2) == 0:
+                return False
+        return True
+
+    def nextPrime(N):
+        if N <= 1:
+            return 2
+        prime = N
+        found = False
+        while not found:
+            prime += 1
+            if isPrime(prime):
+                found = True
+        return prime
+    
+    return nextPrime(current * 2)

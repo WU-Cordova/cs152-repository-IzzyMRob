@@ -3,14 +3,12 @@
 # Imports
 from projects.project3.BistroSystem import BistroSystem
 from datastructures.array import Array
-
-# Constants
-drinks: list = ["Latte", "Matcha", "Hot Cocoa", "London Fog", "Red Bull Fusion"]
+from projects.project3.text import drinks
 
 #Implementation
 
 def main():
-
+    """Main function to run the Bistro System"""
     menu:Array = Array(drinks)
     day = BistroSystem(menu)
     day.start()

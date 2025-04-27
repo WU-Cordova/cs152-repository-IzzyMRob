@@ -76,6 +76,7 @@ class HashMap(IHashMap[KT, VT]):
             if k == key:
                 bucket_chain.remove((k,v))
                 self._count -= 1
+                return
         raise KeyError("Key is not in HashMap")
 
     def __contains__(self, key: KT) -> bool:

@@ -125,13 +125,14 @@ class LinkedList[T](ILinkedList[T]):
             self.pop_front()
         self.travel_node = self.travel_node.next
         running = True
-        while running:
-            if self.travel_node.data == item:
-                self.travel_node.previous.next = self.travel_node.next
-                self.travel_node.next.previous = self.travel_node.previous
-                self._count -= 1
-                running = False
-            self.travel_node = self.travel_node.next
+        for i in range(len(self) - 1):
+            while running:
+                if self.travel_node.data == item:
+                    self.travel_node.previous.next = self.travel_node.next
+                    self.travel_node.next.previous = self.travel_node.previous
+                    self._count -= 1
+                    running = False
+                self.travel_node = self.travel_node.next
 
     def remove_all(self, item: T) -> None:
         if not isinstance(item, self._data_type):

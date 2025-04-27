@@ -32,15 +32,21 @@ class HashMap(IHashMap[KT, VT]):
                 return v
         raise KeyError("Key is not in HashMap")
 
-    def __setitem__(self, key: KT, value: VT) -> None:        
+    def __setitem__(self, key: KT, value: VT) -> None:
+        # get index and linked list of bucket
         bucket_index: int = self._get_bucket_index(key, len(self._buckets))
         bucket_chain: LinkedList = self._buckets[bucket_index]
-        for (k,v) in bucket_chain:
-            if k == key:
-                v = value
-            else:
-                bucket_chain.append((key, value))
+        # loop through nodes, when key is correct set it to the new value and remove the old node
+        for node in bucket_chain:
+            if node[0] == key:
+                bucket_chain.replace(node, (key,value))
+                return #exit
+        # if the key wasn't in the LinkedList add it
+        bucket_chain.append((key,value))
         self._count += 1
+        # handle resizing
+        if self._count / len(self._buckets) > self._load_factor_threshold:
+            self._resize()
 
     def keys(self) -> Iterator[KT]:
         keys = []
@@ -64,11 +70,13 @@ class HashMap(IHashMap[KT, VT]):
         return iter(items)
                 
     def __delitem__(self, key: KT) -> None:
-        for bucket in self._buckets:
-            if key in bucket:
-                bucket.remove(key)
-            else:
-                raise KeyError("Key is not in HashMap")
+        bucket_index: int = self._get_bucket_index(key, len(self._buckets))
+        bucket_chain: LinkedList = self._buckets[bucket_index]
+        for (k,v) in bucket_chain:
+            if k == key:
+                bucket_chain.remove((k,v))
+                self._count -= 1
+        raise KeyError("Key is not in HashMap")
 
     def __contains__(self, key: KT) -> bool:
         bucket_index: int = self._get_bucket_index(key, len(self._buckets))
@@ -87,7 +95,11 @@ class HashMap(IHashMap[KT, VT]):
                 yield node[0]
 
     def __eq__(self, other: object) -> bool:
-        raise NotImplementedError("HashMap.__eq__() is not implemented yet.")
+        if not isinstance(other, HashMap):
+            raise TypeError("Other must ba a HashMap")
+        if self.items == other.items and self.items == other.items:
+            return True
+        return False
 
     def __str__(self) -> str:
         return "{" + ", ".join(f"{key}: {value}" for key, value in self._buckets) + "}"
@@ -96,10 +108,19 @@ class HashMap(IHashMap[KT, VT]):
         return f"HashMap({str(self)})"
     
     def _resize(self) -> None:
-        temp_buckets = self._buckets
-        # find next doubled prime number
-        # init new empty bucket list
-        # move all items over
+        """Method to increase the size of the HashMap."""
+        old_buckets = self._buckets
+        new_len = get_next_prime(len(old_buckets))
+        self._buckets: Array[LinkedList[Tuple[KT,VT]]] = \
+            Array(
+                starting_sequence=[LinkedList(data_type=tuple) for _ in range(new_len)],
+                data_type=LinkedList
+            )
+        for old_bucket in old_buckets:
+            for old_node in old_bucket:
+                new_index = self._get_bucket_index(old_node[0], new_len)
+                new_chain = self._buckets[new_index]
+                new_chain.append(old_node)
 
     @staticmethod
     def _default_hash_function(key: KT) -> int:
@@ -124,29 +145,30 @@ class HashMap(IHashMap[KT, VT]):
         return int(hashlib.md5(key_bytes).hexdigest(), 16)
     
 def get_next_prime(current) -> int:
-
-    def isPrime(n):
-        
+    """Returns the next prime number larger than double the number passed in."""
+    def is_prime(n):
+        """Returns True if the number is a prime, False otherwise"""
         if n <= 1:
             return False
         if n <= 3:
             return True
         if n % 2 == 0 or n % 3 == 0:
             return False
-        for i in range(5,int(math.sqrt(n) + 1), 6): 
+        for i in range(5, int(math.sqrt(n) + 1), 6): 
             if n % i == 0 or n % (i + 2) == 0:
                 return False
         return True
 
-    def nextPrime(N):
+    def next_prime(N):
+        """Returns the next prime number larger than N"""
         if N <= 1:
             return 2
         prime = N
         found = False
         while not found:
             prime += 1
-            if isPrime(prime):
+            if is_prime(prime):
                 found = True
         return prime
     
-    return nextPrime(current * 2)
+    return next_prime(current * 2)

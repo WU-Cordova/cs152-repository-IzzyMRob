@@ -60,7 +60,6 @@ class Array(IArray[T]):
     def __setitem__(self, index: int, item: T) -> None:
         if not isinstance(item, self.__data_type):
             raise TypeError(f"Item is not an instance of {self.__data_type}")
-
         self.__elements[index] = item
 
     def append(self, data: T) -> None:

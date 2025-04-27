@@ -34,6 +34,14 @@ class LinkedList[T](ILinkedList[T]):
                 raise TypeError("All items in the sequence must be the same type.")
             linked_list.append(item)
         return linked_list
+    
+    def replace(self, old_data, new_data):
+        current = self.head
+        while current != None:
+            if current.data == old_data:
+                break
+            current = current.next
+        current.data = new_data
 
     def append(self, item: T) -> None:
         if not isinstance(item, self._data_type):
@@ -113,6 +121,9 @@ class LinkedList[T](ILinkedList[T]):
         if not item in self:
             raise ValueError("Cannot remove item not in LinkedList")
         self.travel_node = self.head
+        if self.travel_node.data == item:
+            self.pop_front()
+        self.travel_node = self.travel_node.next
         running = True
         while running:
             if self.travel_node.data == item:

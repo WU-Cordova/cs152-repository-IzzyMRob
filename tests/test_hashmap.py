@@ -8,8 +8,8 @@ class TestHashMap:
         return HashMap[int, str]()
 
     @pytest.fixture
-    def populated_hashmap(self) -> HashMap[int, str]:
-        hashmap = HashMap[int, str]()
+    def populated_hashmap(self) -> HashMap[int,str]:
+        hashmap = HashMap[int,str]()
         for i in range(10):
             hashmap[i] = str(i)
         return hashmap
